@@ -15,7 +15,9 @@ const config: Config = {
       },
     },
     colors: {
-      'blue': '#1890ff'
+      'blue': '#1890ff',
+      'blue-side': '#3f6083',
+      white: '#FFFFFF'
     },
   },
   plugins: [],
