@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { Order } from "@/services/orders/interface";
 import ordersService from "@/services/orders";
-import { Table } from "./components/table";
 import { Header } from "./components/header";
+import { Table } from "./components/table";
 
-export default function Production() {
+export default function Finished() {
     const [orders, setOrders] = useState<Order[]>([]);
 
     const listAll = () => {
-        ordersService.list(false).then(data => {
+        ordersService.list(true).then(data => {
             setOrders(data)
         })
     }
@@ -21,8 +21,8 @@ export default function Production() {
 
     return (
         <React.Fragment>
-            <Header listAll={listAll} />
-            <Table data={orders} listAll={listAll} />
+            <Header />
+            <Table data={orders} />
         </React.Fragment>
     )
 }

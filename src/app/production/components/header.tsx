@@ -19,7 +19,7 @@ export const Header: FC<HeaderProps> = ({listAll}) => {
     return (
         <header className="flex h-16 items-center justify-between mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-blue font-sans">PEDIDOS</h1>
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-blue font-sans">PRODUÇÃO</h1>
             </div>
             <div>
                 <Button className="font-bold" type="primary" onClick={() => setOpen(true)}>ADICIONAR PEDIDO</Button>

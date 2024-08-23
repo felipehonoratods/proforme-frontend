@@ -3,9 +3,9 @@ import { Order, OrderCreated } from "./interface";
 
 const url = "/orders";
 
-const list = async () => {
+const list = async (finished: boolean) => {
     try {
-        const { data } = await api.get<Order[]>(url + '/list');
+        const { data } = await api.get<Order[]>(url + '/list' + `?finished=${finished}`);
         return data;
     } catch (error) {
         return Promise.reject(error);
@@ -30,11 +30,21 @@ const update = async (payload: OrderCreated) => {
     }
 }
 
+const deleteOrder = async (id: string) => {
+    try {
+        const { data } = await api.delete(`${url}/${id}`);
+        return data;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 
 const ordersService = {
     list,
     create,
-    update
+    update,
+    deleteOrder
 }
 
 export default ordersService;

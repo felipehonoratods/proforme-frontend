@@ -1,8 +1,8 @@
 'use client'
 
 import React, { FC } from 'react';
-import { Select, Table as TableAntd, Tooltip } from 'antd';
-import { CheckCircleFilled, CloseCircleFilled, WarningFilled } from '@ant-design/icons';
+import { Col, Row, Select, Table as TableAntd, Tooltip } from 'antd';
+import { CheckCircleFilled, CloseCircleFilled, DeleteOutlined, EditOutlined, WarningFilled } from '@ant-design/icons';
 import { Order, OrderCreated } from '@/services/orders/interface';
 import { calcDateDifference, dateText } from '@/shared/utils';
 import ordersService from '@/services/orders';
@@ -28,6 +28,12 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
             listAll();
         });
     };
+
+    const deleteChange = (_id: string) => {
+        ordersService.deleteOrder(_id).then(() => {
+            listAll();
+        });
+    }
 
     return (
         <TableAntd dataSource={data} rowKey={'_id'}>
@@ -80,6 +86,7 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
                 <span className='font-bold font-sans' style={{ color: '#1890ff' }}>CORTE</span>
             } dataIndex="cut_status" key="cut_status" render={(value: number, record) => {
                 return <Select
+                    disabled={value === 1}
                     defaultValue={0}
                     style={{ width: 120 }}
                     value={value}
@@ -104,6 +111,7 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
                 <span className='font-bold font-sans' style={{ color: '#1890ff' }}>ESTAMPARIA</span>
             } dataIndex="stamping" key="stamping" render={(value: number, record) => {
                 return <Select
+                    disabled={value === 1}
                     defaultValue={0}
                     style={{ width: 120 }}
                     value={value}
@@ -128,6 +136,7 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
                 <span className='font-bold font-sans' style={{ color: '#1890ff' }}>BORDADO</span>
             } dataIndex="needlework_status" key="needlework_status" render={(value: number, record) => {
                 return <Select
+                    disabled={value === 1}
                     defaultValue={0}
                     style={{ width: 120 }}
                     value={value}
@@ -152,6 +161,7 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
                 <span className='font-bold font-sans' style={{ color: '#1890ff' }}>COSTURA</span>
             } dataIndex="chain_stitch_status" key="chain_stitch_status" render={(value: number, record) => {
                 return <Select
+                    disabled={value === 1}
                     defaultValue={0}
                     style={{ width: 120 }}
                     value={value}
@@ -176,6 +186,7 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
                 <span className='font-bold font-sans' style={{ color: '#1890ff' }}>FINALIZAÇÃO</span>
             } dataIndex="finishing_status" key="finishing_status" render={(value: number, record) => {
                 return <Select
+                    disabled={value === 1}
                     defaultValue={0}
                     style={{ width: 120 }}
                     value={value}
@@ -200,6 +211,7 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
                 <span className='font-bold font-sans' style={{ color: '#1890ff' }}>ENTREGA</span>
             } dataIndex="delivery_status" key="delivery_status" render={(value: number, record) => {
                 return <Select
+                    disabled={value === 1}
                     defaultValue={0}
                     style={{ width: 120 }}
                     value={value}
@@ -219,6 +231,23 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
                         handleChange(payload);
                     }}
                     options={STATUS_OPTIONS} />;
+            }} />
+            <Column title={
+                <span className='font-bold font-sans' style={{ color: '#1890ff' }}>AÇÕES</span>
+            } dataIndex="_id" key="_id" render={(value: string) => {
+                return (
+                    <Row justify={'space-around'}>
+                        <Col>
+                            <EditOutlined style={{ color: 'yellowgreen', cursor: 'pointer' }} />
+                        </Col>
+                        <Col>
+                            <DeleteOutlined style={{ color: '#DE0000', cursor: 'pointer' }} onClick={(e) => {
+                                e.preventDefault();
+                                deleteChange(value);
+                            }} />
+                        </Col>
+                    </Row>
+                )
             }} />
         </TableAntd>
     )

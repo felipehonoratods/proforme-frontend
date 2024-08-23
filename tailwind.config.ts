@@ -15,9 +15,11 @@ const config: Config = {
       },
     },
     colors: {
-      'blue': '#1890ff',
-      'blue-side': '#3f6083',
-      white: '#FFFFFF'
+      blue: '#1890ff',
+      white: '#FFFFFF',
+      red: '#DE0000',
+      grenn: '#6DB753',
+      'blue-side': '#3f6083'
     },
   },
   plugins: [],
