@@ -1,8 +1,10 @@
 'use client'
 
 import ordersService from "@/services/orders";
+import { Order } from "@/services/orders/interface";
 import { Button, Col, DatePicker, Form, FormProps, Input, Row } from "antd";
-import { FC, useState } from "react";
+import dayjs from "dayjs";
+import { FC, useEffect, useState } from "react";
 
 type FieldType = {
     order_number?: number;
@@ -16,10 +18,11 @@ type FieldType = {
 };
 
 interface ModalCreateProps {
-    onClose: () => void
+    onClose: () => void;
+    order?: Order;
 }
 
-export const CreateModal: FC<ModalCreateProps> = ({ onClose }) => {
+export const CreateModal: FC<ModalCreateProps> = ({ onClose, order }) => {
     const [loading, setloading] = useState(false);
     const [form] = Form.useForm();
 
@@ -35,14 +38,37 @@ export const CreateModal: FC<ModalCreateProps> = ({ onClose }) => {
             amount_pieces: values.amount_pieces,
             items: values.items
         }
-        ordersService.create(payload)
-            .then(() => {
-                setloading(false)
-                onClose();
-                form.resetFields();
-            })
-            .catch(() => setloading(false))
+        if (order?._id) {
+            ordersService.update({...payload, _id: order._id})
+                .then(() => {
+                    setloading(false)
+                    onClose();
+                    form.resetFields();
+                })
+                .catch(() => setloading(false))
+        } else {
+            ordersService.create(payload)
+                .then(() => {
+                    setloading(false)
+                    onClose();
+                    form.resetFields();
+                })
+                .catch(() => setloading(false))
+        }
     };
+
+    useEffect(() => {
+        if (order) {
+            form.setFieldValue('order_number', order.order_number);
+            form.setFieldValue('client', order.client);
+            form.setFieldValue('deadline', dayjs(order.deadline));
+            form.setFieldValue('observations', order.observations);
+            form.setFieldValue('amount', order.amount);
+            form.setFieldValue('created_at', dayjs(order.created_at));
+            form.setFieldValue('amount_pieces', order.amount_pieces);
+            form.setFieldValue('items', order.items);
+        }
+    }, [form, order]);
 
     return (
         <Form
