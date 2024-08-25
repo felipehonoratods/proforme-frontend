@@ -20,9 +20,10 @@ type FieldType = {
 interface ModalCreateProps {
     onClose: () => void;
     order?: Order;
+    lastOrderNumber?: string;
 }
 
-export const CreateModal: FC<ModalCreateProps> = ({ onClose, order }) => {
+export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNumber }) => {
     const [loading, setloading] = useState(false);
     const [form] = Form.useForm();
 
@@ -86,8 +87,9 @@ export const CreateModal: FC<ModalCreateProps> = ({ onClose, order }) => {
                         }
                         name="order_number"
                         rules={[{ required: true }]}
+                        initialValue={lastOrderNumber ? Number(lastOrderNumber) + 1 : "00001"}
                     >
-                        <Input type="number" />
+                        <Input type="number" disabled />
                     </Form.Item>
                 </Col>
                 <Col xs={11}>
