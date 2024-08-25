@@ -9,7 +9,13 @@ export const dateText = (value: Date) => {
 export const calcDateDifference = (dataOne: string, dateTwo: string) => {
   const dateInitial: Date = new Date(dataOne);
   const dateFinal: Date = new Date(dateTwo);
-  const diffTime: number = dateInitial.getTime() - dateFinal.getTime();
+  const diffTime: number = dateInitial.getDate() - dateFinal.getDate();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
 };
+
+export const incrementedNumber = (num: string) => {
+  const incrementedNumber = (parseInt(num) + 1).toString();
+
+  return incrementedNumber.padStart(num.length, '0');
+}
