@@ -12,6 +12,15 @@ const list = async (finished: boolean) => {
     }
 }
 
+const listAll = async () => {
+    try {
+        const { data } = await api.get<Order[]>(url + '/list');
+        return data;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 const create = async (payload: OrderCreated) => {
     try {
         const { data } = await api.post(`${url}/create`, payload);
@@ -41,6 +50,7 @@ const deleteOrder = async (id: string) => {
 
 
 const ordersService = {
+    listAll,
     list,
     create,
     update,

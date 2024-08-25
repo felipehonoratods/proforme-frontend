@@ -8,11 +8,15 @@ import { Header } from "./components/header";
 
 export default function Production() {
     const [orders, setOrders] = useState<Order[]>([]);
+    const [ordersAbsolute, setOrdersAbsolute] = useState<Order[]>([]);
 
     const listAll = () => {
         ordersService.list(false).then(data => {
             setOrders(data)
-        })
+        });
+        ordersService.listAll().then(data => {
+            setOrdersAbsolute(data)
+        });
     }
 
     useEffect(() => {
@@ -21,7 +25,7 @@ export default function Production() {
 
     return (
         <React.Fragment>
-            <Header listAll={listAll} />
+            <Header listAll={listAll} data={ordersAbsolute} />
             <Table data={orders} listAll={listAll} />
         </React.Fragment>
     )
