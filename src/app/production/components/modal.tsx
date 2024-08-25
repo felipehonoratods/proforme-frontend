@@ -2,6 +2,7 @@
 
 import ordersService from "@/services/orders";
 import { Order } from "@/services/orders/interface";
+import { incrementedNumber } from "@/shared/utils";
 import { Button, Col, DatePicker, Form, FormProps, Input, Row } from "antd";
 import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
@@ -87,7 +88,7 @@ export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNum
                         }
                         name="order_number"
                         rules={[{ required: true }]}
-                        initialValue={lastOrderNumber ? Number(lastOrderNumber) + 1 : "00001"}
+                        initialValue={lastOrderNumber ? incrementedNumber(lastOrderNumber) : "00001"}
                     >
                         <Input type="number" disabled />
                     </Form.Item>
