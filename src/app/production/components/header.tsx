@@ -1,16 +1,14 @@
 'use client'
 
 import { Button, Modal } from "antd";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { CreateModal } from "./modal";
-import { Order } from "@/services/orders/interface";
 
 interface HeaderProps {
     listAll: () => void;
-    lastOrderNumber?: string;
 }
 
-export const Header: FC<HeaderProps> = ({listAll, lastOrderNumber}) => {
+export const Header: FC<HeaderProps> = ({listAll}) => {
     const [open, setOpen] = useState(false);
 
     const handleCancel = () => {
@@ -35,7 +33,7 @@ export const Header: FC<HeaderProps> = ({listAll, lastOrderNumber}) => {
                 onCancel={handleCancel}
                 width={'50%'}
             >
-                <CreateModal onClose={handleCancel} lastOrderNumber={lastOrderNumber} />
+                <CreateModal onClose={handleCancel} />
             </Modal>
         </header>
     )

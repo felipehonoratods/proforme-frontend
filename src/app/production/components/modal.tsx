@@ -21,15 +21,15 @@ type FieldType = {
 interface ModalCreateProps {
     onClose: () => void;
     order?: Order;
-    lastOrderNumber?: string;
 }
 
-export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNumber }) => {
+export const CreateModal: FC<ModalCreateProps> = ({ onClose, order }) => {
+    const [lastOrderNumber, setLastOrderNumber] = useState<string>()
     const [loading, setloading] = useState(false);
     const [form] = Form.useForm();
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        setloading(true)
+        setloading(true);
         const payload = {
             order_number: values.order_number,
             client: values.client,
@@ -41,19 +41,23 @@ export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNum
             items: values.items
         }
         if (order?._id) {
-            ordersService.update({...payload, _id: order._id})
+            ordersService.update({ ...payload, _id: order._id })
                 .then(() => {
-                    setloading(false)
-                    onClose();
-                    form.resetFields();
+                    setTimeout(() => {
+                        setloading(false);
+                        onClose();
+                        form.resetFields();
+                    }, 2000);
                 })
                 .catch(() => setloading(false))
         } else {
             ordersService.create(payload)
                 .then(() => {
-                    setloading(false)
-                    onClose();
-                    form.resetFields();
+                    setTimeout(() => {
+                        setloading(false);
+                        onClose();
+                        form.resetFields();
+                    }, 2000);
                 })
                 .catch(() => setloading(false))
         }
@@ -71,6 +75,17 @@ export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNum
             form.setFieldValue('items', order.items);
         }
     }, [form, order]);
+
+    useEffect(() => {
+        if (!order?._id) {
+            ordersService.listAll().then(data => {
+                if (data.length > 0) {
+                    setLastOrderNumber(data[data.length - 1].order_number)
+                }
+            });
+        }
+    }, [order?._id]);
+
 
     return (
         <Form
