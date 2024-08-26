@@ -14,7 +14,7 @@ interface TablePropsOrders {
 export const Table: FC<TablePropsOrders> = ({ data }) => {
 
     return (
-        <TableAntd dataSource={data} rowKey={'_id'}>
+        <TableAntd dataSource={data} rowKey={'_id'} scroll={{ x: 'max-content' }}>
             <Column title={
                 <span className='font-bold font-sans' style={{ color: '#1890ff' }}>PEDIDO</span>
             } dataIndex="order_number" key="order_number" className='text-blue font-bold' />

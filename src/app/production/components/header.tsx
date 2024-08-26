@@ -7,23 +7,16 @@ import { Order } from "@/services/orders/interface";
 
 interface HeaderProps {
     listAll: () => void;
-    data: Order[];
+    lastOrderNumber?: string;
 }
 
-export const Header: FC<HeaderProps> = ({listAll, data}) => {
+export const Header: FC<HeaderProps> = ({listAll, lastOrderNumber}) => {
     const [open, setOpen] = useState(false);
-    const [lastOrderNumber, setLastOrderNumber] = useState<string>()
 
     const handleCancel = () => {
         setOpen(false);
         listAll();
     };
-
-    useEffect(() => {
-      if (data.length > 0) {
-        setLastOrderNumber(data[data.length - 1].order_number)
-      }
-    }, [data]);
 
     return (
         <header className="flex h-16 items-center justify-between mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

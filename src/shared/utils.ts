@@ -9,7 +9,7 @@ export const dateText = (value: Date) => {
 export const calcDateDifference = (dataOne: string, dateTwo: string) => {
   const dateInitial: Date = new Date(dataOne);
   const dateFinal: Date = new Date(dateTwo);
-  const diffTime: number = dateInitial.getDate() - dateFinal.getDate();
+  const diffTime: number = dateInitial.setHours(0, 0, 0, 0) - dateFinal.setHours(0, 0, 0, 0);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
 };

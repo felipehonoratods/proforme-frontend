@@ -8,14 +8,16 @@ import { Header } from "./components/header";
 
 export default function Production() {
     const [orders, setOrders] = useState<Order[]>([]);
-    const [ordersAbsolute, setOrdersAbsolute] = useState<Order[]>([]);
+    const [lastOrderNumber, setLastOrderNumber] = useState<string>()
 
     const listAll = () => {
         ordersService.list(false).then(data => {
             setOrders(data)
         });
         ordersService.listAll().then(data => {
-            setOrdersAbsolute(data)
+            if (data.length > 0) {
+                setLastOrderNumber(data[data.length - 1].order_number)
+            }
         });
     }
 
@@ -25,7 +27,7 @@ export default function Production() {
 
     return (
         <React.Fragment>
-            <Header listAll={listAll} data={ordersAbsolute} />
+            <Header listAll={listAll} lastOrderNumber={lastOrderNumber} />
             <Table data={orders} listAll={listAll} />
         </React.Fragment>
     )
