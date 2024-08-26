@@ -1,13 +1,26 @@
+'use client'
+
+import { theme } from "antd";
+
 export const Content = ({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) => {
+    const {
+        token: { colorBgContainer, borderRadiusLG },
+    } = theme.useToken();
+    
     return (
-        <div className="p-4 sm:ml-64">
-            <div className="p-4 rounded-lg dark:border-gray-700">
-                {children}
-            </div>
+        <div
+            style={{
+                padding: 24,
+                minHeight: 360,
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+            }}
+        >
+            {children}
         </div>
     )
 }

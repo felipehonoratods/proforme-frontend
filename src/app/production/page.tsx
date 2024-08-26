@@ -5,19 +5,19 @@ import { Order } from "@/services/orders/interface";
 import ordersService from "@/services/orders";
 import { Table } from "./components/table";
 import { Header } from "./components/header";
+import { Skeleton } from "antd";
 
 export default function Production() {
     const [orders, setOrders] = useState<Order[]>([]);
-    const [lastOrderNumber, setLastOrderNumber] = useState<string>()
+    const [loading, setloading] = useState(false);
 
     const listAll = () => {
+        setloading(true);
         ordersService.list(false).then(data => {
-            setOrders(data)
-        });
-        ordersService.listAll().then(data => {
-            if (data.length > 0) {
-                setLastOrderNumber(data[data.length - 1].order_number)
-            }
+            setTimeout(() => {
+                setOrders(data)
+                setloading(false);
+            }, 2000);
         });
     }
 
@@ -27,8 +27,12 @@ export default function Production() {
 
     return (
         <React.Fragment>
-            <Header listAll={listAll} lastOrderNumber={lastOrderNumber} />
-            <Table data={orders} listAll={listAll} />
+            <Header listAll={listAll} />
+            {loading ?
+                <Skeleton />
+                :
+                <Table data={orders} listAll={listAll} />
+            }
         </React.Fragment>
     )
 }

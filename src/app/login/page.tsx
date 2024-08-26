@@ -7,15 +7,19 @@ import { useState } from "react";
 
 export default function Login() {
     const [alert, setAlert] = useState(false);
+    const [loading, setloading] = useState(false);
     const router = useRouter();
 
     const signup = (formData: FormData) => {
+        setloading(true);
         authService.signin(formData).then((response) => {
             if (!response.error) {
                 localStorage.setItem('token', response.data.access_token);
                 router.push('/production');
+                setloading(false);
             } else {
                 setAlert(true);
+                setloading(false);
             }
         })
     }
@@ -74,6 +78,8 @@ export default function Login() {
                         <div>
                             <button
                                 type="submit"
+                                disabled={loading}
+                                style={{ opacity: loading ? 0.5 : undefined }}
                                 className="flex w-full justify-center rounded-md bg-blue px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Acessar

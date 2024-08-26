@@ -4,11 +4,14 @@ import React, { useEffect, useState } from "react";
 import { Header } from "./components/header";
 import { Table } from "./components/table";
 import externalOrdersService from "@/services/external_orders";
+import { Skeleton } from "antd";
 
 export default function Shopping() {
     const [orders, setOrders] = useState<any[]>([]);
+    const [loading, setloading] = useState(false);
 
     const listAll = () => {
+        setloading(true);
         externalOrdersService.list().then(data => {
             const refactoredOrders = data.flatMap(order =>
                 order.item.map((item: any) => ({
@@ -18,7 +21,10 @@ export default function Shopping() {
                     id: order.id
                 }))
             );
-            setOrders(refactoredOrders);
+            setTimeout(() => {
+                setOrders(refactoredOrders);
+                setloading(false);
+            }, 2000);
         })
     };
 
@@ -29,7 +35,11 @@ export default function Shopping() {
     return (
         <React.Fragment>
             <Header listAll={listAll} />
-            <Table data={orders} listAll={listAll} />
+            {loading ?
+                <Skeleton />
+                :
+                <Table data={orders} listAll={listAll} />
+            }
         </React.Fragment>
     )
 }
