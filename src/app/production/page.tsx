@@ -19,7 +19,7 @@ export default function Production() {
             setTimeout(() => {
                 setOrders(data)
                 setloading(false);
-            }, 2000);
+            }, 1000);
         });
         ordersService.listAll().then(data => {
             if (data.length > 0) {

@@ -24,7 +24,7 @@ export default function Shopping() {
             setTimeout(() => {
                 setOrders(refactoredOrders);
                 setloading(false);
-            }, 2000);
+            }, 1000);
         })
     };
 
