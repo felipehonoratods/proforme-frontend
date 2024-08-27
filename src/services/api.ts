@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const instance = axios.create({
     baseURL: 'https://proforme-backend.onrender.com',
@@ -17,5 +17,17 @@ instance.interceptors.request.use((config) => {
 
     return config;
 });
+
+instance.interceptors.response.use(
+    (response) => response,
+    (error: AxiosError) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            window.location.replace("/login");
+        }
+        return Promise.reject(error);
+    }
+);
+
 
 export default instance;

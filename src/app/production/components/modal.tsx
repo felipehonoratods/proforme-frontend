@@ -2,7 +2,6 @@
 
 import ordersService from "@/services/orders";
 import { Order } from "@/services/orders/interface";
-import { incrementedNumber } from "@/shared/utils";
 import { Button, Col, DatePicker, Form, FormProps, Input, Row, Skeleton } from "antd";
 import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
@@ -21,11 +20,10 @@ type FieldType = {
 interface ModalCreateProps {
     onClose: () => void;
     order?: Order;
+    lastOrderNumber: string;
 }
 
-export const CreateModal: FC<ModalCreateProps> = ({ onClose, order }) => {
-    const [loadingForm, setloadingForm] = useState(false)
-    const [lastOrderNumber, setLastOrderNumber] = useState<string>()
+export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNumber }) => {
     const [loading, setloading] = useState(false);
     const [form] = Form.useForm();
 
@@ -77,149 +75,131 @@ export const CreateModal: FC<ModalCreateProps> = ({ onClose, order }) => {
         }
     }, [form, order]);
 
-    useEffect(() => {
-        setloadingForm(true);
-        if (!order?._id) {
-            ordersService.listAll().then(data => {
-                if (data.length > 0) {
-                    setLastOrderNumber(data[data.length - 1].order_number)
-                }
-                setloadingForm(false);
-            });
-        } else {
-            setloadingForm(false);
-        }
-    }, [order?._id]);
+    return (
+        <Form
+            form={form}
+            onFinish={onFinish}
+            autoComplete="off"
+            layout="vertical"
+            className="font-bold"
+        >
+            <Row justify={"space-between"}>
+                <Col xs={11}>
+                    <Form.Item<FieldType>
+                        label={
+                            <span style={{ color: '#1890ff' }}>Nº PEDIDO</span>
+                        }
+                        name="order_number"
+                        rules={[{ required: true }]}
+                        initialValue={lastOrderNumber}
+                    >
+                        <Input type="number" disabled />
+                    </Form.Item>
+                </Col>
+                <Col xs={11}>
+                    <Form.Item<FieldType>
+                        label={
+                            <span style={{ color: '#1890ff' }}>CLIENTE</span>
+                        }
+                        name="client"
+                        rules={[{ required: true }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                </Col>
+            </Row>
 
-    if (loadingForm) {
-        return <Skeleton />
-    } else {
-        return (
-            <Form
-                form={form}
-                onFinish={onFinish}
-                autoComplete="off"
-                layout="vertical"
-                className="font-bold"
+            <Row justify={"space-between"}>
+                <Col xs={8}>
+                    <Form.Item<FieldType>
+                        label={
+                            <span style={{ color: '#1890ff' }}>VALOR</span>
+                        }
+                        name="amount"
+                        rules={[{ required: true }]}
+                    >
+                        <Input prefix={
+                            <span style={{ color: '#1890ff' }}>R$</span>
+                        } type="number" min={0} />
+                    </Form.Item>
+                </Col>
+                <Col xs={6}>
+                    <Form.Item<FieldType>
+                        label={
+                            <span style={{ color: '#1890ff' }}>DATA RECEBIMENTO</span>
+                        }
+                        name="created_at"
+                        rules={[{ required: true }]}
+                    >
+                        <DatePicker placeholder="Selecione a data" />
+                    </Form.Item>
+
+                </Col>
+                <Col xs={6}>
+                    <Form.Item<FieldType>
+                        label={
+                            <span style={{ color: '#1890ff' }}>PRAZO ENTREGA</span>
+                        }
+                        name="deadline"
+                        rules={[{ required: true }]}
+                    >
+                        <DatePicker placeholder="Selecione a data" />
+                    </Form.Item>
+
+                </Col>
+            </Row>
+
+            <Form.Item<FieldType>
+                label={
+                    <span style={{ color: '#1890ff' }}>OBSERVAÇÃO</span>
+                }
+                name="observations"
+                rules={[{ required: true }]}
             >
-                <Row justify={"space-between"}>
-                    <Col xs={11}>
-                        <Form.Item<FieldType>
-                            label={
-                                <span style={{ color: '#1890ff' }}>Nº PEDIDO</span>
-                            }
-                            name="order_number"
-                            rules={[{ required: true }]}
-                            initialValue={lastOrderNumber ? incrementedNumber(lastOrderNumber) : "00001"}
-                        >
-                            <Input type="number" disabled />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={11}>
-                        <Form.Item<FieldType>
-                            label={
-                                <span style={{ color: '#1890ff' }}>CLIENTE</span>
-                            }
-                            name="client"
-                            rules={[{ required: true }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-    
-                <Row justify={"space-between"}>
-                    <Col xs={8}>
-                        <Form.Item<FieldType>
-                            label={
-                                <span style={{ color: '#1890ff' }}>VALOR</span>
-                            }
-                            name="amount"
-                            rules={[{ required: true }]}
-                        >
-                            <Input prefix={
-                                <span style={{ color: '#1890ff' }}>R$</span>
-                            } type="number" min={0} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={6}>
-                        <Form.Item<FieldType>
-                            label={
-                                <span style={{ color: '#1890ff' }}>DATA RECEBIMENTO</span>
-                            }
-                            name="created_at"
-                            rules={[{ required: true }]}
-                        >
-                            <DatePicker placeholder="Selecione a data" />
-                        </Form.Item>
-    
-                    </Col>
-                    <Col xs={6}>
-                        <Form.Item<FieldType>
-                            label={
-                                <span style={{ color: '#1890ff' }}>PRAZO ENTREGA</span>
-                            }
-                            name="deadline"
-                            rules={[{ required: true }]}
-                        >
-                            <DatePicker placeholder="Selecione a data" />
-                        </Form.Item>
-    
-                    </Col>
-                </Row>
-    
-                <Form.Item<FieldType>
-                    label={
-                        <span style={{ color: '#1890ff' }}>OBSERVAÇÃO</span>
-                    }
-                    name="observations"
-                    rules={[{ required: true }]}
-                >
-                    <Input.TextArea />
-                </Form.Item>
-    
-                <Row justify={'space-between'}>
-                    <Col xs={10}>
-                        <Form.Item<FieldType>
-                            label={
-                                <span style={{ color: '#1890ff' }}>Nº ITENS</span>
-                            }
-                            name="items"
-                            rules={[{ required: true }]}
-                        >
-                            <Input type="number" min={0} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={10}>
-                        <Form.Item<FieldType>
-                            label={
-                                <span style={{ color: '#1890ff' }}>Nº PEÇAS</span>
-                            }
-                            name="amount_pieces"
-                            rules={[{ required: true }]}
-                        >
-                            <Input type="number" min={0} />
-                        </Form.Item>
-                    </Col>
-                </Row>
-    
-                <Row className="flex justify-center gap-3">
-                    <Col>
-                        <Button className="font-bold text-blue font-sans" type="default" onClick={onClose}>
-                            CANCELAR
+                <Input.TextArea />
+            </Form.Item>
+
+            <Row justify={'space-between'}>
+                <Col xs={10}>
+                    <Form.Item<FieldType>
+                        label={
+                            <span style={{ color: '#1890ff' }}>Nº ITENS</span>
+                        }
+                        name="items"
+                        rules={[{ required: true }]}
+                    >
+                        <Input type="number" min={0} />
+                    </Form.Item>
+                </Col>
+                <Col xs={10}>
+                    <Form.Item<FieldType>
+                        label={
+                            <span style={{ color: '#1890ff' }}>Nº PEÇAS</span>
+                        }
+                        name="amount_pieces"
+                        rules={[{ required: true }]}
+                    >
+                        <Input type="number" min={0} />
+                    </Form.Item>
+                </Col>
+            </Row>
+
+            <Row className="flex justify-center gap-3">
+                <Col>
+                    <Button className="font-bold text-blue font-sans" type="default" onClick={onClose}>
+                        CANCELAR
+                    </Button>
+                </Col>
+
+                <Col>
+                    <Form.Item>
+                        <Button className="font-bold font-sans" type="primary" htmlType="submit" loading={loading}>
+                            ADICIONAR
                         </Button>
-                    </Col>
-    
-                    <Col>
-                        <Form.Item>
-                            <Button className="font-bold font-sans" type="primary" htmlType="submit" loading={loading}>
-                                ADICIONAR
-                            </Button>
-                        </Form.Item>
-                    </Col>
-                </Row>
-    
-            </Form>
-        )
-    }
+                    </Form.Item>
+                </Col>
+            </Row>
+
+        </Form>
+    )
 }

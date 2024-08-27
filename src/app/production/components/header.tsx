@@ -6,9 +6,10 @@ import { CreateModal } from "./modal";
 
 interface HeaderProps {
     listAll: () => void;
+    lastOrderNumber: string;
 }
 
-export const Header: FC<HeaderProps> = ({listAll}) => {
+export const Header: FC<HeaderProps> = ({listAll, lastOrderNumber}) => {
     const [open, setOpen] = useState(false);
 
     const handleCancel = () => {
@@ -33,7 +34,7 @@ export const Header: FC<HeaderProps> = ({listAll}) => {
                 onCancel={handleCancel}
                 width={'50%'}
             >
-                <CreateModal onClose={handleCancel} />
+                <CreateModal onClose={handleCancel} lastOrderNumber={lastOrderNumber} />
             </Modal>
         </header>
     )

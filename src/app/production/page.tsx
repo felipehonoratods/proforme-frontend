@@ -6,8 +6,10 @@ import ordersService from "@/services/orders";
 import { Table } from "./components/table";
 import { Header } from "./components/header";
 import { Skeleton } from "antd";
+import { incrementedNumber } from "@/shared/utils";
 
 export default function Production() {
+    const [lastOrderNumber, setLastOrderNumber] = useState<string>("00001");
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setloading] = useState(false);
 
@@ -19,6 +21,11 @@ export default function Production() {
                 setloading(false);
             }, 2000);
         });
+        ordersService.listAll().then(data => {
+            if (data.length > 0) {
+                setLastOrderNumber(incrementedNumber(data[data.length - 1].order_number));
+            }
+        });
     }
 
     useEffect(() => {
@@ -27,11 +34,13 @@ export default function Production() {
 
     return (
         <React.Fragment>
-            <Header listAll={listAll} />
             {loading ?
                 <Skeleton />
                 :
-                <Table data={orders} listAll={listAll} />
+                <>
+                    <Header listAll={listAll} lastOrderNumber={lastOrderNumber} />
+                    <Table data={orders} listAll={listAll} />
+                </>
             }
         </React.Fragment>
     )
