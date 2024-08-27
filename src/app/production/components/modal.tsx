@@ -20,7 +20,7 @@ type FieldType = {
 interface ModalCreateProps {
     onClose: () => void;
     order?: Order;
-    lastOrderNumber: string;
+    lastOrderNumber?: string;
 }
 
 export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNumber }) => {
