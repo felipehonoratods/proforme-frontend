@@ -17,7 +17,7 @@ export default function Finished() {
             setTimeout(() => {
                 setOrders(data);
                 setloading(false);
-            }, 2000);
+            }, 1000);
         })
     }
 

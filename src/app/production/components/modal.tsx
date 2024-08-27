@@ -46,7 +46,7 @@ export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNum
                         setloading(false);
                         onClose();
                         form.resetFields();
-                    }, 2000);
+                    }, 1000);
                 })
                 .catch(() => setloading(false))
         } else {
@@ -56,7 +56,7 @@ export const CreateModal: FC<ModalCreateProps> = ({ onClose, order, lastOrderNum
                         setloading(false);
                         onClose();
                         form.resetFields();
-                    }, 2000);
+                    }, 1000);
                 })
                 .catch(() => setloading(false))
         }
