@@ -25,6 +25,7 @@ const STATUS_OPTIONS = [
 export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
     const [order, setOrder] = useState<Order>();
     const [open, setOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const handleOpenEdit = (order: Order) => {
         setOrder(order);
@@ -50,7 +51,12 @@ export const Table: FC<TablePropsOrders> = ({ data, listAll }) => {
 
     return (
         <>
-            <TableAntd dataSource={data} rowKey={'_id'} scroll={{ x: 'max-content' }}>
+            <TableAntd dataSource={data} rowKey={'_id'} scroll={{ x: 'max-content' }} pagination={{
+                onChange(page) {
+                    setCurrentPage(page)
+                }, 
+                current: currentPage
+            }}>
                 <Column title={
                     <span className='font-bold font-sans' style={{ color: '#1890ff' }}>PEDIDO</span>
                 } dataIndex="order_number" key="order_number" className='text-blue font-bold' />
